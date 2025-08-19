@@ -11,6 +11,7 @@ contract HelperConfig is Script {
     struct NetworkConfig {
         address entryPoint;
         address account;
+        address payMaster;
         address tokenAddress; // link token
     }
 
@@ -55,6 +56,7 @@ contract HelperConfig is Script {
         //0x0000000071727De22E5E9d8BAf0edAc6f37da032
         config.entryPoint = address(0);
         config.account = BURNER_WALLET;
+        config.payMaster = address(0);
         config.tokenAddress = 0x779877A7B0D9E8603169DdbD7836e478b4624789;
     }
 
@@ -74,6 +76,7 @@ contract HelperConfig is Script {
     {
         config.entryPoint = 0x0000000071727De22E5E9d8BAf0edAc6f37da032;
         config.account = BURNER_WALLET;
+        config.payMaster = 0x84C758bfeCD7122bAe7f83A2faA2c8409A4783e2;
         config.tokenAddress = 0xb1D4538B4571d411F07960EF2838Ce337FE1E80E;
     }
 
@@ -90,6 +93,7 @@ contract HelperConfig is Script {
         localNetworkConfig = NetworkConfig({
             entryPoint: address(entryPoint),
             account: ANVIL_DEFAULT_ACCOUNT,
+            payMaster: address(0),
             tokenAddress: address(0)
         });
         return localNetworkConfig;

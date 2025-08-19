@@ -52,6 +52,19 @@ flattenClone :; forge flatten src/core/EntryPoint.sol > MockEntryPoint.sol
 
 deployEth :; forge script script/DeployMinimal.s.sol --rpc-url ${ARBITRUM_SEPOLIA_RPC_URL} --sender ${SMALL_MONEY_SENDER} --account ${SMALL_MONEYA_CCOUNT} --broadcast --verify -vvvv
 
+deployPayMaster :; forge script script/DeployPayMaster.s.sol --rpc-url ${ARBITRUM_SEPOLIA_RPC_URL} --sender ${SMALL_MONEY_SENDER} --account ${SMALL_MONEYA_CCOUNT} --broadcast --verify -vvvv
+
+depoistEntryPoint :; cast send ${PAY_MASTER_ADDRESS}\
+  "deposit()" \
+  --value ${DEPOSIT_AMOUNT} \
+  --account ${SMALL_MONEYA_CCOUNT} \
+  --rpc-url ${ARBITRUM_SEPOLIA_RPC_URL}
+
+withdrawEntryPoint :;  cast send ${PAY_MASTER_ADDRESS}\
+  "withdrawTo(address,uint256)" ${SMALL_MONEY_SENDER} ${WITHDRAW_AMOUNT}\
+  --account ${SMALL_MONEYA_CCOUNT} \
+  --rpc-url ${ARBITRUM_SEPOLIA_RPC_URL}
+
 verify :; forge verify-contract --etherscan-api-key ${ETHERSCAN_API_KEY} --rpc-url ${MAINNET_RPC_URL} XXX <PATH_TO_CONTRACT>
 
 getCalldata :; cast calldata "approve(address,uint256)" 0x9EA9b0cc1919def1A3CfAEF4F7A66eE3c36F86fC 100000000000000000000

@@ -45,7 +45,7 @@ contract SendPackedUserOp is Script {
 
         // Add your call data here(functionData)
         bytes memory functionData = abi.encodeWithSelector(
-            IERC20.approve.selector,
+            IERC20.transfer.selector,
             tokenReceiver,
             777e13
         );
@@ -90,7 +90,8 @@ contract SendPackedUserOp is Script {
         PackedUserOperation memory userOp = _generateUnsignedUserOperation(
             callData,
             minimalAccount,
-            nonce
+            nonce,
+            config.payMaster
         );
 
         //Get the userOpHas
@@ -128,12 +129,26 @@ contract SendPackedUserOp is Script {
     function _generateUnsignedUserOperation(
         bytes memory callData,
         address sender,
-        uint256 nonce
+        uint256 nonce,
+        address payMaster
     ) internal pure returns (PackedUserOperation memory) {
         uint128 verificationGasLimit = 16777216;
         uint128 callGasLimit = verificationGasLimit;
         uint128 maxPriorityFeePerGas = 256;
         uint128 maxFeePerGas = maxPriorityFeePerGas;
+
+        address paymaster = payMaster;
+        uint128 validationGasLimit = 1000000;
+        uint128 postOpGasLimit = 1000000;
+        bytes memory paymasterSpecificData = hex"";
+
+        bytes memory paymasterAndData = abi.encodePacked(
+            address(paymaster), // 20 bytes
+            uint128(validationGasLimit), // 16 bytes
+            uint128(postOpGasLimit), // 16 bytes
+            bytes(paymasterSpecificData) // optional, variable length
+        );
+
         return
             PackedUserOperation({
                 sender: sender,
@@ -147,7 +162,7 @@ contract SendPackedUserOp is Script {
                 gasFees: bytes32(
                     (uint256(maxPriorityFeePerGas) << 128) | maxFeePerGas
                 ),
-                paymasterAndData: hex"",
+                paymasterAndData: paymasterAndData,
                 signature: hex""
             });
     }
