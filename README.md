@@ -18,7 +18,7 @@ It includes deployment scripts, helper utilities, and example flows for sending 
 ##   Installation
 
 ```sh
-git clone https://github.com/achen667/AccountAbstruction.git
+git clone https://github.com/achen667/AccountAbstraction.git
 cd AccountAbstruction
 make install
 
